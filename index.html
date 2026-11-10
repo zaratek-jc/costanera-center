@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening Activity: Getting to Costanera Center</title>
+  <style>
+    :root {
+      --oxford-blue: #002147;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --border-color: #cbd5e1;
+      --success: #16a34a;
+      --error: #dc2626;
+      --word-chip-bg: #e0f2fe;
+      --word-chip-border: #0284c7;
+      --word-chip-text: #0369a1;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Header Banner */
+    .header-banner {
+      background-color: var(--oxford-blue);
+      color: #ffffff;
+      width: 100%;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      margin-bottom: 24px;
+    }
+
+    .header-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .header-subtitle {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #93c5fd;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 900px;
+      width: calc(100% - 32px);
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+    }
+
+    .instruction {
+      font-size: 1.05rem;
+      color: #475569;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* Student Info Panel */
+    .info-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      align-items: center;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .input-group input, .input-group select {
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      background-color: #ffffff;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--primary);
+    }
+
+    .timer-display {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: #eff6ff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      text-align: center;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Audio Player Component */
+    .audio-player-card {
+      background: #1e293b;
+      color: white;
+      padding: 18px 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .audio-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .audio-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .speed-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+
+    .speed-label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .speed-btn {
+      background: transparent;
+      color: #cbd5e1;
+      border: 1px solid #475569;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .speed-btn:hover {
+      background: #334155;
+      color: white;
+    }
+
+    .speed-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Word Bank Pool */
+    .word-bank-section {
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 24px;
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .word-bank-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 50px;
+    }
+
+    .word-chip {
+      background-color: var(--word-chip-bg);
+      color: var(--word-chip-text);
+      border: 1px solid var(--word-chip-border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s, background-color 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .word-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background-color: #bae6fd;
+    }
+
+    .word-chip.dragging {
+      opacity: 0.4;
+      cursor: grabbing;
+    }
+
+    .word-chip.selected {
+      outline: 3px solid var(--primary);
+      background-color: #7dd3fc;
+    }
+
+    /* Dialogue Section */
+    .dialogue-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      line-height: 2.2;
+      font-size: 1.05rem;
+    }
+
+    .dialogue-line {
+      margin-bottom: 16px;
+    }
+
+    .speaker {
+      font-weight: 800;
+      color: var(--oxford-blue);
+      margin-right: 6px;
+    }
+
+    /* Drop Zones */
+    .drop-zone {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      height: 34px;
+      padding: 2px 10px;
+      border-bottom: 2px dashed var(--primary);
+      background-color: #f8fafc;
+      border-radius: 6px;
+      margin: 0 4px;
+      vertical-align: middle;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .drop-zone.drag-over {
+      background-color: #dbeafe;
+      border-color: var(--primary-hover);
+      transform: scale(1.03);
+    }
+
+    .drop-zone.filled {
+      border: 1px solid var(--word-chip-border);
+      background-color: var(--word-chip-bg);
+      color: var(--word-chip-text);
+      font-weight: 600;
+      border-bottom-width: 2px;
+    }
+
+    .drop-zone.correct {
+      background-color: #dcfce7 !important;
+      border-color: var(--success) !important;
+      color: #15803d !important;
+    }
+
+    .drop-zone.incorrect {
+      background-color: #fee2e2 !important;
+      border-color: var(--error) !important;
+      color: #b91c1c !important;
+      text-decoration: line-through;
+    }
+
+    /* Action Buttons */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #64748b;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #15803d;
+    }
+
+    /* Modal Results */
+    .results-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .results-content {
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .score-badge {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 16px 0;
+    }
+
+    .motivation-msg {
+      font-size: 1.1rem;
+      color: #334155;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+      .header-title { font-size: 1.6rem; }
+      .header-subtitle { font-size: 1.05rem; }
+      .container { padding: 16px; }
+      .drop-zone { min-width: 90px; }
+      .word-bank-section { position: relative; top: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header-banner">
+  <h1 class="header-title">COLEGIO SAN IGNACIO</h1>
+  <div class="header-subtitle">6th grade Listening Activity</div>
+</header>
+
+<div class="container">
+  <div class="instruction">
+    🎧 Listen to the audio "Getting to Costanera Center", then drag (or tap) the correct words into the missing gaps.
+  </div>
+
+  <!-- Student Info Panel -->
+  <div class="info-card">
+    <div class="input-group">
+      <label for="student-course">Class</label>
+      <select id="student-course">
+        <option value="">-- Select Class --</option>
+        <option value="6° Básico A">6° Básico A</option>
+        <option value="6° Básico B">6° Básico B</option>
+        <option value="6° Básico C">6° Básico C</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="student-name">Student</label>
+      <select id="student-name" disabled>
+        <option value="">-- Select class first --</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="activity-date">Date</label>
+      <input type="date" id="activity-date">
+    </div>
+    <div class="timer-display" id="timer">Time: 00:00</div>
+  </div>
+
+  <!-- Reproductor Audio MP3 -->
+  <div class="audio-player-card">
+    <div class="audio-controls">
+      <button class="audio-btn" id="play-btn">▶ Play</button>
+      <button class="audio-btn" id="pause-btn">⏸ Pause</button>
+      <button class="audio-btn" id="repeat-btn">🔄 Replay</button>
+
+      <div class="speed-controls">
+        <span class="speed-label">Speed:</span>
+        <button class="speed-btn active" data-speed="1.0">1.0x</button>
+        <button class="speed-btn" data-speed="0.8">0.8x</button>
+      </div>
+
+      <span id="audio-status" style="font-size: 0.88rem; color: #cbd5e1;">Ready to listen</span>
+    </div>
+    <audio id="html-audio" src="1costanera.mp3" preload="auto"></audio>
+  </div>
+
+  <!-- Word Bank -->
+  <div class="word-bank-section">
+    <div class="word-bank-title">
+      <span>Word Bank (Drag or click a word, then click a gap)</span>
+      <span id="word-count-badge" style="color: var(--primary);">0 remaining</span>
+    </div>
+    <div class="word-bank" id="word-bank">
+      <!-- Dynamically generated chips -->
+    </div>
+  </div>
+
+  <!-- Interactive Dialogue -->
+  <div class="dialogue-card">
+    <div class="dialogue-line">
+      <span class="speaker">Passerby:</span> Hello! You <span class="drop-zone" data-answer="look"></span> a bit lost with your map. <span class="drop-zone" data-answer="Can I help you"></span> with anything?
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Tourist:</span> Oh, hello! Yes, please. Excuse me, <span class="drop-zone" data-answer="how do I get to"></span> Costanera Center from here?
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Passerby:</span> Hello! It's very easy to <span class="drop-zone" data-answer="reach"></span> from this spot. <span class="drop-zone" data-answer="Go straight on"></span> along Avenida Providencia for about <span class="drop-zone" data-answer="three blocks"></span>.
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Tourist:</span> Okay, go straight on for three blocks. <span class="drop-zone" data-answer="What next"></span>?
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Passerby:</span> When you reach the <span class="drop-zone" data-answer="intersection"></span> with Tobalaba, <span class="drop-zone" data-answer="turn left"></span> at the traffic light. You <span class="drop-zone" data-answer="won't miss it"></span>—the Sky Costanera tower is right in front of you <span class="drop-zone" data-answer="across the bridge"></span>!
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Tourist:</span> Perfect, thank you! By the way, I’m Sarah from <span class="drop-zone" data-answer="Australia"></span>. I work as an <span class="drop-zone" data-answer="architect"></span> back home in Sydney.
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Passerby:</span> <span class="drop-zone" data-answer="Welcome"></span> to Santiago, Sarah! I'm Gabriel, an <span class="drop-zone" data-answer="elementary"></span> school teacher. What do you think of <span class="drop-zone" data-answer="our city"></span> so far?
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Tourist:</span> I think Santiago is <span class="drop-zone" data-answer="incredible"></span>! As an architect, I'm completely <span class="drop-zone" data-answer="fascinated"></span> by how modern glass <span class="drop-zone" data-answer="skyscrapers"></span> sit right next to classic historic <span class="drop-zone" data-answer="buildings"></span> with the Andes mountains in the <span class="drop-zone" data-answer="background"></span>.
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Passerby:</span> I'm so glad you <span class="drop-zone" data-answer="appreciate"></span> that mix! Enjoy the <span class="drop-zone" data-answer="shopping mall"></span> and make sure to head up to the <span class="drop-zone" data-answer="observation deck"></span> for the view.
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Tourist:</span> I definitely will. Thanks for your <span class="drop-zone" data-answer="help"></span>, Gabriel!
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Passerby:</span> My <span class="drop-zone" data-answer="pleasure"></span>! Have a fantastic day.
+    </div>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="action-bar">
+    <button class="btn btn-primary" id="check-btn">✔ Check Answers</button>
+    <button class="btn btn-secondary" id="reset-btn">🔄 Try Again</button>
+    <button class="btn btn-success" id="download-btn">📥 Download Report</button>
+  </div>
+</div>
+
+<!-- Modal Results -->
+<div class="results-modal" id="results-modal">
+  <div class="results-content">
+    <h2>Activity Completed!</h2>
+    <div class="score-badge" id="score-display">[0/24]</div>
+    <p class="motivation-msg" id="motivation-display"></p>
+    <button class="btn btn-primary" style="margin: 0 auto;" onclick="closeModal()">Close & Review</button>
+  </div>
+</div>
+
+<script>
+  // Student Database
+  const studentsData = {
+    "6° Básico A": [
+      "ARELLANO CORTÉS VALENTÍN ALONSO", "BUSTOS QUEZADA FELIPE ALONSO", "CALDERÓN LEZCANO ISIDORA MARTINA", "CASTAÑEDA iBAÑEZ FERNANDA","CARO ORELLANA AGUSTINA ANTONIA", "CÉSPEDES SÁNCHEZ JOSEFINA IGNACIA", "CUEVAS MAHN IGNACIO ALEJANDRO", "DÍAZ GUTIÉRREZ TOMÁS ALONSO", "DÍAZ MEDEL VIOLETA EMILIANA", "DÍAZ TORO ALBERTO ALEJANDRO", "ESCOBEDO DE LA FUENTE VALENTINA ANDREA", "GILCHRIST VALDÉS ALEXANDER NEDJELJKO", "GÓMEZ GALLARDO TERESITA EMILIA", "GÓMEZ ZÚÑIGA JOSÉ IGNACIO", "GUERRERO MORENO GABRIEL", "GUTIÉRREZ PACHECO ANTONIA CAROLINA", "GUZMÁN MINA CATALINA PAZ", "GUZMÁN ZAMORA JOSÉ TOMÁS", "HONTAVILLA ROGAZY CATALINA FERNANDA", "MANRÍQUEZ CATALÁN MARIANA IGNACIA", "OJEDA ESTEVEZ VICTORIA ANTONELLA", "OPAZO CABEZAS EMILIA ALOISE", "OSORIO BERRIOS GASTÓN ALONSO VITAL", "PEÑAS SOTO SANTIAGO RAFAEL", "PINTO CASTRO MATEO IGNACIO", "POZO URETA CRISTÓBAL VALENTÍN", "PRADENA PEREDO ANTONIA HELENA", "RAMÍREZ ESPINOZA DIEGO JOAQUÍN", "RIVEROS ALVAREZ FRANCISCA ANDREA", "RODRÍGUEZ MERCADO GUSTAVO VENTURA", "VALENZUELA CANALES MARTINA PASCALE", "VÁSQUEZ CONTRERAS MARÍA FERNANDA", "VERA RUIZ MATILDE IGNACIA", "VILLAR RAULD NICOLÁS AGUSTÍN", "VILLEGAS LLANCO JUAN IGNACIO", "YÁÑEZ ESPINOZA DIEGO ANTONIO"
+    ],
+    "6° Básico B": [
+      "ARAVENA RUZ VICENTE ALEJANDRO", "ARÍSTEGUI PARRAGUEZ PASCALE AURORA", "BLANCO VERA GABRIEL ADOLFO", "BRITO JOFRÉ EMILIA JOSEFINA", "BRUNET CUELLAR SEBASTIÁN ARIEL", "CERPA CARRILLO EMILIA JESÚS", "FUENZALIDA PARRA VIOLETA", "GONZÁLEZ VERGARA IGNACIO ANTONIO", "GORNALL ALARCON RAYEN ELUNEY", "LABRAÑA BARRERA AMANDA LOURDES", "LEÓN DÁVILA TOMÁS IGNACIO", "LEÓN SAAVEDRA NICOLE VICTORIA", "LILLO SALDAÑA FRANCISCA SOFÍA", "LOYOLA HERRERA JOSEFA IGNACIA", "MAHNCKE MONSALVE IGNACIO ANTONIO", "MALDONADO SEGOVIA SANTIAGO AGUSTÍN", "MENA BRAVO RAÚL ALBERTO", "MORENO BRACAMONTE MARCO ALEJANDRO", "MOYA MADERO JOSEFINA EMILIA", "NOVA ACEVEDO MARTINA IGNACIA", "OLIVARES CATRO JOSEFINA PAZ", "ORTIZ DONOSO SIMONA IGNACIA", "PÉREZ GONZÁLEZ ALONSO SEBASTIÁN", "POVEDA SERRANO PABLO SALVADOR", "RAMÍREZ LÓPEZ JOSÉ MIGUEL", "REBOLLO FUENTES BENJAMÍN IGNACIO", "RIESCO MENDOZA TOMAS FELIPE", "RUBIO ROSAS JULIÁN ALEJANDRO", "SMOK RODRÍGUEZ LAURA VICTORIA", "SOTO GONZÁLEZ JOSEFA IGNACIA", "VENEGAS ARANCIBIA DIEGO TOMÁS", "VERDEJO GALLEGUILLOS BENJAMÍN TOMÁS ANTONIO", "VIDAL TORRES GONZALO ANTONIO", "VILLALOBOS GUEVARA JULIÁN ERNESTO", "YÁÑEZ LÓPEZ FERNANDA SOFÍA", "VILLAGRA ALARCÓN ANITA CAROLINA"
+    ],
+    "6° Básico C": [
+      "ABURTO ROMERO PABLO IGNACIO", "ACEVEDO GARRIDO ANAHÍ", "APIOLAZA SCACCHI TOMÁS ANDRÉS", "ARBURO LEÓN BRUNO AUGUSTO", "BAHAMONDES CÁCERES CAMILA MAGDALENA", "CABAÑAS GUIMPERT DAMIÁN", "CÁCERES MUÑOZ LAURA SOFÍA", "CALDERÓN ZAMORA FACUNDO", "CORREA PIÑA RENATA IGNACIA", "CUEVAS VIVALLO AMANDA SOFÍA", "DELGADO OLIVA CATALINA HELENA", "DÍAZ ARAGÓN GONZALO ANDRÉS", "DÍAZ PÉREZ ROCÍO VICTORIA", "FAJARDO GALLEGOS SEBASTIÁN IGNACIO", "LABRA MERIÑO SEBASTIÁN GABRIEL", "MARCHANT CARRANCIO PÍA CAROLINA", "MARCHANT ESCANDOR ISABELLA", "MOLINEAUX CEPEDA LEONOR VIOLETA", "MUÑOZ NORAMBUENA JOAQUÍN EDUARDO", "OLIVA RODRÍGUEZ MARTINA BELÉN", "OLIVARES CASTILLO FRANCISCA FERNANDA", "OLIVARES SÁNCHEZ RAÚL ALONSO", "PEÑA MARTÍN CAROLINA", "REYGADAS MUÑOZ MÁXIMO VALENTINO", "RIFFO FERNÁNDEZ VALENTÍN", "RODRÍGUEZ YÁÑEZ BEATRIZ AMALIA", "RUIZ URZÚA CLEMENTE ALONSO", "RUTHERFORD RUTHERFORD MARÍA GRACIA", "SALINAS ZAMORANO VICENTE RAFAEL", "SILVA MANRÍQUEZ GASPAR SALVADOR", "TRUJILLO PINTO ALONSO ANDRÉS", "URZÚA LAROZE FRANCISCO JAVIER", "VARGAS URRUTIA AMANDA IGNACIA", "VALIENTE NÚÑEZ MARÍA PAZ", "VELASCO BARCELÓ GASPAR ANTÜ", "WALKER TORRES SALVADOR", "ZÚÑIGA ARAVENA JOAQUÍN ALONSO"
+    ]
+  };
+
+  // Target answers
+  const dropZones = document.querySelectorAll(".drop-zone");
+  const targetWords = [...dropZones].map(z => z.dataset.answer);
+
+  let selectedChip = null;
+  let timerInterval = null;
+  let secondsElapsed = 0;
+  let isTimerRunning = false;
+
+  // DOM Elements
+  const wordBank = document.getElementById("word-bank");
+  const playBtn = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
+  const repeatBtn = document.getElementById("repeat-btn");
+  const htmlAudio = document.getElementById("html-audio");
+  const audioStatus = document.getElementById("audio-status");
+  const timerDisplay = document.getElementById("timer");
+  const dateInput = document.getElementById("activity-date");
+  const courseSelect = document.getElementById("student-course");
+  const nameSelect = document.getElementById("student-name");
+  const speedBtns = document.querySelectorAll(".speed-btn");
+  const wordCountBadge = document.getElementById("word-count-badge");
+
+  // Set Today's Date
+  dateInput.valueAsDate = new Date();
+
+  // Populate Student Dropdown dynamically
+  courseSelect.addEventListener("change", () => {
+    const selectedCourse = courseSelect.value;
+    nameSelect.innerHTML = "";
+
+    if (selectedCourse && studentsData[selectedCourse]) {
+      nameSelect.disabled = false;
+      const defaultOpt = document.createElement("option");
+      defaultOpt.value = "";
+      defaultOpt.textContent = "-- Selecciona Estudiante --";
+      nameSelect.appendChild(defaultOpt);
+
+      studentsData[selectedCourse].forEach(student => {
+        const opt = document.createElement("option");
+        opt.value = student;
+        opt.textContent = student;
+        nameSelect.appendChild(opt);
+      });
+    } else {
+      nameSelect.disabled = true;
+      const defaultOpt = document.createElement("option");
+      defaultOpt.value = "";
+      defaultOpt.textContent = "-- Primero selecciona curso --";
+      nameSelect.appendChild(defaultOpt);
+    }
+  });
+
+  // Shuffle Utility
+  function shuffle(array) {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Timer Controls
+  function startTimer() {
+    if (!isTimerRunning) {
+      isTimerRunning = true;
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+        const secs = String(secondsElapsed % 60).padStart(2, '0');
+        timerDisplay.textContent = `Time: ${mins}:${secs}`;
+      }, 1000);
+    }
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    isTimerRunning = false;
+  }
+
+  function resetTimer() {
+    stopTimer();
+    secondsElapsed = 0;
+    timerDisplay.textContent = "Time: 00:00";
+  }
+
+  // Audio Playback Controls
+  playBtn.addEventListener("click", () => {
+    startTimer();
+    htmlAudio.play().then(() => {
+      audioStatus.textContent = "Playing audio...";
+    }).catch(() => {
+      audioStatus.textContent = `Error playing '${htmlAudio.getAttribute("src")}'`;
+    });
+  });
+
+  pauseBtn.addEventListener("click", () => {
+    htmlAudio.pause();
+    audioStatus.textContent = "Paused";
+  });
+
+  repeatBtn.addEventListener("click", () => {
+    startTimer();
+    htmlAudio.currentTime = 0;
+    htmlAudio.play().then(() => {
+      audioStatus.textContent = "Replaying audio...";
+    }).catch(() => {
+      audioStatus.textContent = `Error playing '${htmlAudio.getAttribute("src")}'`;
+    });
+  });
+
+  speedBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const speed = parseFloat(btn.dataset.speed);
+      htmlAudio.playbackRate = speed;
+      speedBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  // Initialize Word Chips
+  function initializeWordBank() {
+    wordBank.innerHTML = "";
+    const shuffled = shuffle(targetWords);
+
+    shuffled.forEach((word, index) => {
+      const chip = document.createElement("div");
+      chip.className = "word-chip";
+      chip.textContent = word;
+      chip.draggable = true;
+      chip.id = `chip-${index}`;
+
+      chip.addEventListener("dragstart", (e) => {
+        startTimer();
+        chip.classList.add("dragging");
+        e.dataTransfer.setData("text/plain", chip.id);
+      });
+
+      chip.addEventListener("dragend", () => {
+        chip.classList.remove("dragging");
+      });
+
+      chip.addEventListener("click", () => {
+        startTimer();
+        if (selectedChip === chip) {
+          chip.classList.remove("selected");
+          selectedChip = null;
+        } else {
+          if (selectedChip) selectedChip.classList.remove("selected");
+          selectedChip = chip;
+          chip.classList.add("selected");
+        }
+      });
+
+      wordBank.appendChild(chip);
+    });
+
+    updateWordCount();
+  }
+
+  function updateWordCount() {
+    const remaining = wordBank.querySelectorAll(".word-chip").length;
+    wordCountBadge.textContent = `${remaining} remaining`;
+  }
+
+  // Setup Drop Zones
+  dropZones.forEach(zone => {
+    zone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      zone.classList.add("drag-over");
+    });
+
+    zone.addEventListener("dragleave", () => {
+      zone.classList.remove("drag-over");
+    });
+
+    zone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      zone.classList.remove("drag-over");
+      const chipId = e.dataTransfer.getData("text/plain");
+      const chip = document.getElementById(chipId);
+      if (chip) placeChipInZone(chip, zone);
+    });
+
+    zone.addEventListener("click", () => {
+      startTimer();
+      if (zone.classList.contains("filled")) {
+        returnChipToBank(zone);
+      } else if (selectedChip) {
+        placeChipInZone(selectedChip, zone);
+        selectedChip.classList.remove("selected");
+        selectedChip = null;
+      }
+    });
+  });
+
+  function placeChipInZone(chip, zone) {
+    if (zone.classList.contains("filled")) {
+      returnChipToBank(zone);
+    }
+    zone.textContent = chip.textContent;
+    zone.dataset.chipId = chip.id;
+    zone.classList.add("filled");
+    chip.remove();
+    updateWordCount();
+  }
+
+  function returnChipToBank(zone) {
+    if (!zone.classList.contains("filled")) return;
+
+    const word = zone.textContent;
+    const chipId = zone.dataset.chipId;
+
+    const chip = document.createElement("div");
+    chip.className = "word-chip";
+    chip.textContent = word;
+    chip.draggable = true;
+    chip.id = chipId || `chip-${Date.now()}`;
+
+    chip.addEventListener("dragstart", (e) => {
+      chip.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", chip.id);
+    });
+
+    chip.addEventListener("dragend", () => {
+      chip.classList.remove("dragging");
+    });
+
+    chip.addEventListener("click", () => {
+      if (selectedChip === chip) {
+        chip.classList.remove("selected");
+        selectedChip = null;
+      } else {
+        if (selectedChip) selectedChip.classList.remove("selected");
+        selectedChip = chip;
+        chip.classList.add("selected");
+      }
+    });
+
+    wordBank.appendChild(chip);
+
+    zone.textContent = "";
+    zone.removeAttribute("data-chip-id");
+    zone.classList.remove("filled", "correct", "incorrect");
+    updateWordCount();
+  }
+
+  // Check Answers
+  document.getElementById("check-btn").addEventListener("click", () => {
+    stopTimer();
+    let score = 0;
+
+    dropZones.forEach(zone => {
+      const userValue = zone.textContent.trim().toLowerCase();
+      const correctAnswer = zone.dataset.answer.trim().toLowerCase();
+
+      if (userValue === correctAnswer) {
+        score++;
+        zone.classList.add("correct");
+        zone.classList.remove("incorrect");
+      } else {
+        zone.classList.add("incorrect");
+        zone.classList.remove("correct");
+      }
+    });
+
+    showResults(score);
+  });
+
+  function showResults(score) {
+    const total = targetWords.length;
+    const scoreDisplay = document.getElementById("score-display");
+    const motivationDisplay = document.getElementById("motivation-display");
+
+    scoreDisplay.textContent = `[${score}/${total}]`;
+
+    if (score === total) {
+      motivationDisplay.textContent = "🎉 Exceptional work! Perfect score! Your listening skills are outstanding!";
+    } else if (score >= Math.ceil(total * 0.8)) {
+      motivationDisplay.textContent = "🌟 Great job! You listened very carefully and got almost all of them correct!";
+    } else if (score >= Math.ceil(total * 0.5)) {
+      motivationDisplay.textContent = "👍 Good attempt! Listen to the audio again to spot the missing details.";
+    } else {
+      motivationDisplay.textContent = "💪 Keep practicing! Replay the audio and try again to improve your score.";
+    }
+
+    document.getElementById("results-modal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("results-modal").style.display = "none";
+  }
+
+  // Reset Activity
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    resetTimer();
+    dropZones.forEach(zone => {
+      zone.textContent = "";
+      zone.removeAttribute("data-chip-id");
+      zone.classList.remove("filled", "correct", "incorrect");
+    });
+    initializeWordBank();
+  });
+
+  // Download Student Report with Strict Validation
+  document.getElementById("download-btn").addEventListener("click", () => {
+    const studentCourse = courseSelect.value;
+    const studentName = nameSelect.value;
+
+    if (!studentCourse || !studentName) {
+      alert("⚠️ Debes seleccionar tu Curso y Nombre de estudiante de la lista antes de poder descargar el informe.");
+      return;
+    }
+
+    const date = dateInput.value || "N/A";
+    const timeSpent = timerDisplay.textContent.replace("Time: ", "");
+
+    let correctCount = 0;
+    let details = "";
+
+    dropZones.forEach((zone, idx) => {
+      const userVal = zone.textContent.trim();
+      const expected = zone.dataset.answer.trim();
+      const isCorrect = userVal.toLowerCase() === expected.toLowerCase();
+      if (isCorrect) correctCount++;
+
+      details += `Gap #${idx + 1}: Student Answer = "${userVal || 'EMPTY'}" | Expected = "${expected}" [${isCorrect ? 'CORRECT' : 'INCORRECT'}]\n`;
+    });
+
+    const reportContent = `================================================
+COLEGIO SAN IGNACIO
+LISTENING COMPREHENSION REPORT: GETTING TO COSTANERA CENTER
+================================================
+Estudiante    : ${studentName}
+Curso / Grade : ${studentCourse}
+Fecha         : ${date}
+Tiempo Usado  : ${timeSpent}
+Puntaje       : ${correctCount} / ${dropZones.length} (${Math.round((correctCount/dropZones.length)*100)}%)
+================================================
+
+GAP BREAKDOWN:
+------------------------------------------------
+${details}
+================================================
+`;
+
+    const blob = new Blob([reportContent], { type: "text/plain;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Reporte_Listening_${studentName.replace(/\s+/g, '_')}_${studentCourse.replace(/\s+/g, '_')}.txt`;
+    link.click();
+  });
+
+  // Start initialization
+  initializeWordBank();
+</script>
+
+</body>
+</html>
